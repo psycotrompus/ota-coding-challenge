@@ -20,6 +20,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.projectlombok:lombok:1.18.32")
+  implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.5.0")
   annotationProcessor("org.projectlombok:lombok:1.18.32")
   runtimeOnly("com.h2database:h2")
   runtimeOnly("io.r2dbc:r2dbc-h2")

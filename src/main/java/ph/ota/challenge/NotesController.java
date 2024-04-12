@@ -1,9 +1,15 @@
 package ph.ota.challenge;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,12 +35,27 @@ public class NotesController {
 
   private final NoteRepository noteRepo;
 
+  @Operation(summary = "Get all notes.")
+  @ApiResponses(
+      @ApiResponse(responseCode = "200", description = "Notes successfully retrieved.")
+  )
   @GetMapping
   public Flux<NoteDto> getNotes() {
     return noteRepo.findAll().map(note -> new NoteDto(note.getId(), note.getTitle(), note.getBody(),
         note.getLastModified()));
   }
 
+  @Operation(summary = "Get a single note using an ID.")
+  @ApiResponses(value = {
+      @ApiResponse(
+          responseCode = "200",
+          description = "Note ID found.",
+          content = {
+              @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = NoteDto.class))
+          }
+      ),
+      @ApiResponse(responseCode = "404", description = "Note ID not found.")
+  })
   @GetMapping("/{noteId}")
   public Mono<NoteDto> getNote(@PathVariable Integer noteId) {
     return noteRepo.findById(noteId)
@@ -42,6 +63,11 @@ public class NotesController {
         .switchIfEmpty(Mono.error(new NotFoundNoteException("Note not found")));
   }
 
+  @Operation(summary = "Create a note.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "201", description = "Note created."),
+      @ApiResponse(responseCode = "400", description = "Note validation has failed.")
+  })
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<Void> create(@RequestBody @Valid Mono<NoteDto> body) {
@@ -53,6 +79,13 @@ public class NotesController {
         .then();
   }
 
+  @Operation(summary = "Update a note.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Note updated.", content = {
+          @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = NoteDto.class))
+      }),
+      @ApiResponse(responseCode = "400", description = "Note validation has failed.")
+  })
   @PutMapping("/{noteId}")
   public Mono<NoteDto> update(@PathVariable Integer noteId, @RequestBody @Valid Mono<NoteDto> body) {
     return noteRepo.findById(noteId)
@@ -73,6 +106,10 @@ public class NotesController {
         .switchIfEmpty(Mono.error(new NotFoundNoteException("Note not found")));
   }
 
+  @Operation(summary = "Delete a note.")
+  @ApiResponses(
+      @ApiResponse(responseCode = "204", description = "Note deleted.")
+  )
   @DeleteMapping("/{noteId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public Mono<Void> delete(@PathVariable Integer noteId) {

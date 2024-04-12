@@ -33,4 +33,5 @@
 ## Developer Notes
 
 * The base URL of the application is `http://localhost:8080`.
+* Swagger UI is available at `http://localhost:8080/webjars/swagger-ui/index.html`.
 * A collection of postman scripts is available in the `api/` directory. Import the file in Postman.
