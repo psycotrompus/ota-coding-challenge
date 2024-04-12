@@ -1,0 +1,9 @@
+logging.level.root: debug
+
+spring.application.name: ota-coding-challenge
+spring:
+  datasource:
+    url: jdbc:h2:mem:notes
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
