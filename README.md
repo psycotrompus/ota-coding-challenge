@@ -1,5 +1,13 @@
 # OneTeamAnywhere Coding Challenge
 
+## Assumptions
+
+* Running this coding challenge may require the following software development experience using:
+  * Java
+  * Spring Boot (Webflux)
+  * Gradle
+  * Swagger
+
 ## Prerequisites
 
 1. Download and extract [Java SDK](https://download.java.net/java/GA/jdk22/830ec9fcccef480bb3e73fb7ecafe059/36/GPL/openjdk-22_windows-x64_bin.zip).
